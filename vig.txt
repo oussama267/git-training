@@ -1,0 +1,80 @@
+package vigen;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+public class Vigen {
+
+    // تكرار الكلمة المفتاحية لتطابق طول النص
+    public static String repeatKey(String key, int length) {
+        StringBuilder repeated = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            repeated.append(key.charAt(i % key.length()));
+        }
+        return repeated.toString();
+    }
+
+    // 🔐 دالة التشفير
+    public static String encrypt(String text, String key) {
+        text = text.toUpperCase();
+        key = repeatKey(key.toUpperCase(), text.length());
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i++) {
+            char t = text.charAt(i);
+            if (Character.isLetter(t)) {
+                int p = t - 'A';
+                int k = key.charAt(i) - 'A';
+                int c = (p + k) % 26;
+
+                result.append((char) (c + 'A'));
+            } else {
+                result.append(t); // نحافظ على الفراغات والرموز
+            }
+        }
+
+        return result.toString();
+    }
+
+    // 🔓 دالة فك التشفير
+    public static String decrypt(String cipher, String key) {
+        cipher = cipher.toUpperCase();
+        key = repeatKey(key.toUpperCase(), cipher.length());
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < cipher.length(); i++) {
+            char c = cipher.charAt(i);
+            if (Character.isLetter(c)) {
+                int encryptedChar = c - 'A';
+                int k = key.charAt(i) - 'A';
+                int p = (encryptedChar - k + 26) % 26;
+                result.append((char) (p + 'A'));
+            } else {
+                result.append(c);
+
+            }
+        }
+
+        return result.toString();
+    }
+
+    // Add a main method to make the class executable
+    public static void main(String[] args) {
+        // Example usage
+        String text = "HELLO WORLD";
+        String key = "KEY";
+        
+        String encrypted = encrypt(text, key);
+        System.out.println("Encrypted: " + encrypted);
+        
+        String decrypted = decrypt(encrypted, key);
+        System.out.println("Decrypted: " + decrypted);
+    }
+}
+
+    
+ 
